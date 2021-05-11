@@ -22,5 +22,5 @@ exports.echoBot = functions.https.onRequest(async (req, res) => {
   return await bot.handleUpdate(req.body, res).then((rv) => {
     // If it's not a request form the telegram, rv will be undefined, but we should respond with 200
     return !rv && res.sendStatus(200)
-  })
+  });
 });
