@@ -1,5 +1,5 @@
-const Telegraf = require("telegraf");
 const functions = require("firebase-functions");
+const {Telegraf} = require("telegraf");
 
 const bot = new Telegraf(functions.config().telegrambot.key);
 
