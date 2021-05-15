@@ -17,10 +17,11 @@ bot.command("/start", (ctx) => ctx.reply("Hello! Send any message and I will cop
 bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
 
 // Handle all telegram updates with HTTPs trigger
-exports.echoBot = functions.https.onRequest(async (req, res) => {
-  functions.logger.log("Incoming message", req.body)
-  return await bot.handleUpdate(req.body, res).then((rv) => {
-    // If it's not a request form the telegram, rv will be undefined, but we should respond with 200
-    return !rv && res.sendStatus(200)
-  })
-});
+exports.echoBot = functions.https.onRequest(async (request, response) => {
+	functions.logger.log('Incoming message', request.body)
+  const resultUpdate = await bot.handleUpdate(request.body, response).then((rv) => {
+		// if it's not a request from the telegram, rv will be undefined, but we should respond with 200
+		return !rv && response.sendStatus(200)
+	})
+	return resultUpdate
+})
