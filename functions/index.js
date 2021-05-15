@@ -33,6 +33,10 @@ WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
 `
 ));
 
+bot.command("/q", (ctx) => ctx.reply(
+	ctx.message
+))
+
 // Copy every message and send to the user
 bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
 
