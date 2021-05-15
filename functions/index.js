@@ -3,6 +3,14 @@ const {
   Telegraf,
 } = require("telegraf");
 
+const {
+  getCryptoQuote,
+} = require("./services/cmc.js");
+
+const {
+  quoteTemplate,
+} = require("./src/templates.js");
+
 const bot = new Telegraf(functions.config().telegrambot.key, {
   telegram: {
     webhookReply: true,
@@ -27,12 +35,19 @@ bot.command("/help", (ctx) => ctx.reply(
     /qd   <SYMBOL> for get quote details.`
 ));
 
-bot.command("/q", (ctx) => ctx.reply(
-	ctx.message
-))
-
-// Copy every message and send to the user
-bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
+// Get quote
+bot.hears(/^\/q[ =](.+)$/, async (ctx) => {
+  const symbol = ctx.match[1];
+  try {
+    const response = await getCryptoQuote(symbol);
+    console.log(response);
+    ctx.reply(
+        quoteTemplate(symbol, response["USD"], response.name, response.rank)
+    );
+  } catch (error) {
+    ctx.reply(`Sorry bros. I can not get ${ctx.match[1]}: ${error}`);
+  }
+});
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
