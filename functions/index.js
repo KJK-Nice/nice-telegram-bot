@@ -3,10 +3,6 @@ const {
   Telegraf,
 } = require("telegraf");
 
-const {
-	getCryptoQuote
-} = require("./services/cmc.js")
-
 const bot = new Telegraf(functions.config().telegrambot.key, {
   telegram: {
     webhookReply: true,
