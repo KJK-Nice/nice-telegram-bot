@@ -22,6 +22,10 @@ bot.command("/start", (ctx) => ctx.reply(
 // Copy every message and send to the user
 bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
 
-exports.bot = functions.https.onRequest((req, res) => {
-  bot.handleUpdate(req.body, res);
+exports.bot = functions.https.onRequest(async (req, res) => {
+  functions.logger.log("Incoming message", req.body);
+  const update = await bot.handleUpdate(req.body, res).then((rv) => {
+    return !rv && res.sendStatus(200);
+  });
+  return update;
 });
