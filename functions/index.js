@@ -3,6 +3,10 @@ const {
   Telegraf,
 } = require("telegraf");
 
+const {
+	getCryptoQuote
+} = require("./services/cmc.js")
+
 const bot = new Telegraf(functions.config().telegrambot.key, {
   telegram: {
     webhookReply: true,
@@ -19,6 +23,16 @@ bot.catch((err, ctx) => {
 bot.command("/start", (ctx) => ctx.reply(
     "Hello! Send any message and I will copy it."
 ));
+
+bot.command("/help", (ctx) => ctx.reply(
+`
+WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
+/p   <SYMBOL> for get coin price (USD)
+/q   <SYMBOL> for get quote summary.
+/qd   <SYMBOL> for get quote details.
+`
+));
+
 // Copy every message and send to the user
 bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
 
