@@ -3,6 +3,16 @@ const {
   Telegraf,
 } = require("telegraf");
 
+const {
+  getCryptoQuote,
+} = require("./services/cmc.js");
+
+const {
+  quoteTemplate,
+  quoteDetailsTemplate,
+  priceTemplate,
+} = require("./src/templates.js");
+
 const bot = new Telegraf(functions.config().telegrambot.key, {
   telegram: {
     webhookReply: true,
@@ -27,13 +37,66 @@ bot.command("/help", (ctx) => ctx.reply(
     /qd   <SYMBOL> for get quote details.`
 ));
 
-// Copy every message and send to the user
-bot.on("message", (ctx) => ctx.telegram.sendCopy(ctx.chat.id, ctx.message));
+// Get quote
+bot.hears(/^\/p[ =](.+)$/, async (ctx) => {
+  const symbol = ctx.match[1];
+  try {
+    const response = await getCryptoQuote(symbol);
+    functions.logger.log(response);
+    ctx.reply(
+        priceTemplate(symbol, response.usd, response.name, response.rank)
+    );
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+  }
+});
+
+// Get quote
+bot.hears(/^\/q[ =](.+)$/, async (ctx) => {
+  const symbol = ctx.match[1];
+  try {
+    const response = await getCryptoQuote(symbol);
+    functions.logger.log(response);
+    ctx.reply(
+        quoteTemplate(symbol, response.usd, response.name, response.rank)
+    );
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+  }
+});
+
+// Get quote detail
+bot.hears(/^\/qd[ =](.+)$/, async (ctx) => {
+  const symbol = ctx.match[1];
+  try {
+    const response = await getCryptoQuote(symbol);
+    functions.logger.log("Incoming data:", response);
+    const payload = {
+      symbol: response.symbol || symbol,
+      quote: response.usd,
+      rank: response.rank,
+      name: response.name,
+      tags: response.tags.join(", "),
+      circulatingSupply: response.circulatingSupply,
+      totalSupply: response.totalSupply,
+    };
+    const result = quoteDetailsTemplate(payload);
+    ctx.reply(result);
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+  }
+});
+
+// Enable graceful stop
+process.once("SIGINT", () => bot.stop("SIGINT"));
+process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
-  const update = await bot.handleUpdate(req.body, res).then((rv) => {
+  return await bot.handleUpdate(req.body, res).then((rv) => {
     return !rv && res.sendStatus(200);
   });
-  return update;
 });
