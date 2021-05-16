@@ -1,7 +1,7 @@
 exports.prettyNum = (num) => {
   return Number(num).toLocaleString(undefined, {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 8,
+    maximumFractionDigits: 3,
   });
 };
 
@@ -9,6 +9,8 @@ exports.prettyUsd = (num) => {
   return Number(num).toLocaleString("en-EN", {
     style: "currency",
     currency: "USD",
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 8,
   });
 };
 

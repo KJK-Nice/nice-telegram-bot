@@ -42,15 +42,17 @@ exports.quoteTemplate = (symbol, quote, name, rank) => {
 };
 
 // Quote details template
-exports.quoteDetailsTemplate = ({
-  symbol,
-  quote,
-  rank,
-  name,
-  tags,
-  circulatingSupply,
-  totalSupply,
-}) => {
+exports.quoteDetailsTemplate = (payload) => {
+  console.log(payload);
+  const {
+    symbol,
+    quote,
+    rank,
+    name,
+    tags,
+    circulatingSupply,
+    totalSupply,
+  } = payload;
   const {
     price,
     volume_24h: vol24h,
@@ -65,6 +67,7 @@ exports.quoteDetailsTemplate = ({
   const supply = circulatingSupply/totalSupply;
   const circulatingSupplyInM = prettyNum(circulatingSupply/1000000);
   const totalSupplyInM = prettyNum(totalSupply/1000000);
+
   return `
   ${name}, CMC Rank.${rank}, ${ symbol }/USD
   ${change24h < 0 ? "🥶" : "🤑"} price: ${ prettyUsd(price) } 
