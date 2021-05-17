@@ -15,9 +15,7 @@ exports.prettyUsd = (num) => {
 };
 
 exports.processMoon = (percent) => {
-  if (percent > 0 && percent < 0.2) {
-    return "🌑";
-  } else if (percent > 0.2 && percent < 0.4) {
+  if (percent > 0.2 && percent < 0.4) {
     return "🌘";
   } else if (percent > 0.4 && percent < 0.6) {
     return "🌗";
@@ -25,5 +23,7 @@ exports.processMoon = (percent) => {
     return "🌖";
   } else if (percent > 0.8) {
     return "🌕";
+  } else {
+    return "🌑";
   }
 };
