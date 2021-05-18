@@ -37,7 +37,7 @@ bot.command("/help", (ctx) => ctx.reply(
     /qd   <SYMBOL> for get quote details.`
 ));
 
-// Get quote
+// Get quote price
 bot.hears(/^\/p[ =](.+)$/, async (ctx) => {
   const symbol = ctx.match[1];
   try {
@@ -48,7 +48,7 @@ bot.hears(/^\/p[ =](.+)$/, async (ctx) => {
     );
   } catch (error) {
     functions.logger.error(error);
-    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+    ctx.reply(`Sorry bros. I can not get ${symbol}`);
   }
 });
 
@@ -63,7 +63,7 @@ bot.hears(/^\/q[ =](.+)$/, async (ctx) => {
     );
   } catch (error) {
     functions.logger.error(error);
-    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+    ctx.reply(`Sorry bros. I can not get ${symbol}`);
   }
 });
 
@@ -86,7 +86,7 @@ bot.hears(/^\/qd[ =](.+)$/, async (ctx) => {
     ctx.reply(result);
   } catch (error) {
     functions.logger.error(error);
-    ctx.reply(`Sorry bros. I can not get ${symbol}: ${error}`);
+    ctx.reply(`Sorry bros. I can not get ${symbol}.`);
   }
 });
 
