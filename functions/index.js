@@ -40,7 +40,8 @@ bot.command("/help", (ctx) => ctx.reply(
     `WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
     /p   <SYMBOL> for get coin price (USD)
     /q   <SYMBOL> for get quote summary.
-    /qd   <SYMBOL> for get quote details.`
+    /qd   <SYMBOL> for get quote details.
+    /trending for get Top-7 trending on CoinGecKo`
 ));
 
 // Get quote price
