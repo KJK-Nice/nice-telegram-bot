@@ -118,9 +118,7 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
-  return await bot.handleUpdate(req.body, res);
+  return await bot.handleUpdate(req.body, res).then((rv) => {
+    return !rv && res.sendStatus(200);
+  });
 });
-
-// .then((rv) => {
-//   return !rv && res.sendStatus(200);
-// });
