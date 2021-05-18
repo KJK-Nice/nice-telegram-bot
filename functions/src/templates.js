@@ -84,3 +84,21 @@ exports.quoteDetailsTemplate = (payload) => {
   🏷 tags: ${tags}
   `;
 };
+
+exports.trendingTemplate = (btc, coins) => {
+  const result = coins.map((coin, index) => {
+    const {
+      name,
+      symbol,
+      market_cap_rank: rank,
+      price_btc: pricePerBtc,
+    } = coin.item;
+    const price = prettyUsd(pricePerBtc*btc);
+    return `🔥${index + 1}. ${symbol} | ${name} | Rank. ${rank} | ${price}`;
+  });
+  return `
+  🔥Top-7 trending coins on CoinGecko🔥
+  **by searched in the last 24 hours**
+${result.join("\n")}
+  `;
+};

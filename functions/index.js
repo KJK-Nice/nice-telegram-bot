@@ -8,9 +8,15 @@ const {
 } = require("./services/cmc.js");
 
 const {
+  getSimplePrice,
+  getTrending,
+} = require("./services/coingecko.js");
+
+const {
   quoteTemplate,
   quoteDetailsTemplate,
   priceTemplate,
+  trendingTemplate,
 } = require("./src/templates.js");
 
 const bot = new Telegraf(functions.config().telegrambot.key, {
@@ -90,13 +96,30 @@ bot.hears(/^\/qd[ =](.+)$/, async (ctx) => {
   }
 });
 
+// Get trending
+bot.command("/trending", async (ctx) => {
+  try {
+    const [btc, trend] = await Promise.all([
+      getSimplePrice("bitcoin", "usd"),
+      getTrending(),
+    ]);
+    const result = await trendingTemplate(btc.price, trend.coinList);
+    ctx.reply(result);
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply(`Something wrong: ${error}`);
+  }
+});
+
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));
 process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
-  return await bot.handleUpdate(req.body, res).then((rv) => {
-    return !rv && res.sendStatus(200);
-  });
+  return await bot.handleUpdate(req.body, res);
 });
+
+// .then((rv) => {
+//   return !rv && res.sendStatus(200);
+// });
