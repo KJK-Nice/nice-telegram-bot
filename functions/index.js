@@ -105,7 +105,7 @@ bot.command("/trending", async (ctx) => {
       getSimplePrice("bitcoin", "usd"),
       getTrending(),
     ]);
-    const result = await trendingTemplate(btc.price, trend.coinList);
+    const result = trendingTemplate(btc.price, trend.coinList);
     ctx.reply(result);
   } catch (error) {
     functions.logger.error(error);
@@ -119,12 +119,13 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
-  bot.telegram.setMyCommands([
-    {command: "p", description: "/p   <SYMBOL> for get coin price (USD)"},
-    {command: "q", description: "/q   <SYMBOL> for get quote summary."},
-    {command: "qd", description: "/qd   <SYMBOL> for get quote details."},
-    {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
-  ]);
+  const listOfCommands = await bot.telegram.getMyCommands();
+  if (listOfCommands.length === 0) {
+    await bot.telegram.setMyCommands([
+      {command: "help", description: "See the manual"},
+      {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
+    ]);
+  }
   return await bot.handleUpdate(req.body, res).then((rv) => {
     return !rv && res.sendStatus(200);
   });
