@@ -111,7 +111,7 @@ bot.command("/trending", async (ctx) => {
       getSimplePrice("bitcoin", "usd"),
       getTrending(),
     ]);
-    const result = trendingTemplate(btc.price, trend.coinList);
+    const result = await trendingTemplate(btc.price, trend.coinList);
     ctx.reply(result);
   } catch (error) {
     functions.logger.error(error);
