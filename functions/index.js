@@ -22,6 +22,9 @@ const {
 const BOT_COMMANDS = [
   {command: "help", description: "See the manual"},
   {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
+  {command: "p", description: "<SYMBOL> coin price"},
+  {command: "q", description: "<SYMBOL> quote summary"},
+  {command: "qd", description: "<SYMBOL> quote details"},
 ];
 
 
@@ -38,17 +41,14 @@ bot.catch((err, ctx) => {
 });
 
 // Initialize the commands
-bot.start("/start", (ctx) => ctx.reply(
-    "Welcome 🥳"
-));
-
+bot.start((ctx) => ctx.reply("Welcome 🥳"));
 
 bot.help((ctx) => ctx.reply(
     `WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
-    /p   <SYMBOL> for get coin price (USD)
-    /q   <SYMBOL> for get quote summary.
-    /qd   <SYMBOL> for get quote details.
-    /trending for get Top-7 trending on CoinGecKo`
+/p   <SYMBOL> for get coin price (USD)
+/q   <SYMBOL> for get quote summary.
+/qd   <SYMBOL> for get quote details.
+/trending for get Top-7 trending on CoinGecKo`
 ));
 
 // Get quote price
@@ -105,13 +105,14 @@ bot.hears(/^\/qd[ =](.+)$/, async (ctx) => {
 });
 
 // Get trending
-bot.command("/trending", async (ctx) => {
+bot.hears("/trending", async (ctx) => {
   try {
     const [btc, trend] = await Promise.all([
       getSimplePrice("bitcoin", "usd"),
       getTrending(),
     ]);
     const result = await trendingTemplate(btc.price, trend.coinList);
+    functions.logger.log("Get trending:", result);
     ctx.reply(result);
   } catch (error) {
     functions.logger.error(error);
