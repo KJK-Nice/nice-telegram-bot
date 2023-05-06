@@ -36,12 +36,6 @@ bot.command("/start", (ctx) => ctx.reply(
     "Hello! Send any message and I will copy it."
 ));
 
-// bot.telegram.setMyCommands([
-//   {command: "p", description: "/p   <SYMBOL> for get coin price (USD)"},
-//   {command: "q", description: "/q   <SYMBOL> for get quote summary."},
-//   {command: "qd", description: "/qd   <SYMBOL> for get quote details."},
-//   {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
-// ]);
 
 bot.command("/help", (ctx) => ctx.reply(
     `WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
@@ -125,6 +119,12 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
+  bot.telegram.setMyCommands([
+    {command: "p", description: "/p   <SYMBOL> for get coin price (USD)"},
+    {command: "q", description: "/q   <SYMBOL> for get quote summary."},
+    {command: "qd", description: "/qd   <SYMBOL> for get quote details."},
+    {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
+  ]);
   return await bot.handleUpdate(req.body, res).then((rv) => {
     return !rv && res.sendStatus(200);
   });
