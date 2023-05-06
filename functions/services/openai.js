@@ -9,8 +9,16 @@ const openai = new OpenAIApi(configuration);
 exports.chatCompletion = (content="Hello world") => {
   return new Promise((resolve, reject) => {
     openai.createChatCompletion({
-      model: "text-davinci-003",
-      prompt: content,
+      model: "gpt-3.5-turbo",
+      messages: [
+        {
+          role: "system",
+          // eslint-disable-next-line max-len
+          content: "You are a laconic assistant. You reply with brief, to-the-point answers with no elaboration.",
+        },
+        {role: "user", content: content},
+      ],
+      temperature: 0.1,
     }).then(async (res) => {
       functions.logger.log(
           "OpenAI response: ",
