@@ -25,6 +25,13 @@ const bot = new Telegraf(process.env.TELEGRAMBOT_KEY, {
   },
 });
 
+bot.telegram.setMyCommands([
+  {command: "p", description: "/p   <SYMBOL> for get coin price (USD)"},
+  {command: "q", description: "/q   <SYMBOL> for get quote summary."},
+  {command: "qd", description: "/qd   <SYMBOL> for get quote details."},
+  {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
+]);
+
 // Error handling
 bot.catch((err, ctx) => {
   functions.logger.error("[Bot] Error", err);
