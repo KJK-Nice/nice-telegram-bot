@@ -6,7 +6,7 @@ const optionsFetchGet = {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
-    "X-CMC_PRO_API_KEY": functions.config().cmc_api.key,
+    "X-CMC_PRO_API_KEY": process.env.CMC_API_KEY,
   },
 };
 

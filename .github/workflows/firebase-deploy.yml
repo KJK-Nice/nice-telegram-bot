@@ -26,7 +26,7 @@ jobs:
       - name: Create SA key
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud.json
       - name: Create Runtime config
-        run: echo '${{ secrets.FIREBASE_RUNTIME_CONFIG }}'> .runtimeconfig.json
+        run: echo '${{ secrets.FIREBASE_RUNTIME_CONFIG }}'> .env
         working-directory: functions
       - name: Deploy Cloud Functions
         run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && ls -a && npx firebase-tools deploy --only functions

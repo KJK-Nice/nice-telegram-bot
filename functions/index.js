@@ -19,7 +19,7 @@ const {
   trendingTemplate,
 } = require("./src/templates.js");
 
-const bot = new Telegraf(functions.config().telegrambot.key, {
+const bot = new Telegraf(process.env.TELEGRAMBOT_KEY, {
   telegram: {
     webhookReply: true,
   },
