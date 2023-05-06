@@ -94,7 +94,7 @@ exports.trendingTemplate = (btc, coins) => {
       price_btc: pricePerBtc,
     } = coin.item;
     const price = prettyUsd(pricePerBtc*btc);
-    return `🔥${index + 1}. ${symbol} | ${name} | Rank. ${rank} | ${price}`;
+    return `${index + 1}. ${symbol} | ${name} | Rank. ${rank} | ${price}`;
   });
   return `
   🔥Top-7 trending coins on CoinGecko🔥
