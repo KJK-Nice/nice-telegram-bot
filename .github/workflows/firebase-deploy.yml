@@ -26,5 +26,5 @@ jobs:
       - name: Create SA key
         run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud.json && ls
       - name: Deploy Cloud Functions
-        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && ls && npx firebase-tools deploy --only functions --json
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && ls && npx firebase-tools deploy --only functions
         working-directory: functions
