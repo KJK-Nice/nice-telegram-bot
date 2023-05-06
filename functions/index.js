@@ -12,6 +12,8 @@ const {
   getTrending,
 } = require("./services/coingecko.js");
 
+const {chatCompletion} = require("./services/openai.js");
+
 const {
   quoteTemplate,
   quoteDetailsTemplate,
@@ -25,6 +27,7 @@ const BOT_COMMANDS = [
   {command: "p", description: "<SYMBOL> coin price"},
   {command: "q", description: "<SYMBOL> quote summary"},
   {command: "qd", description: "<SYMBOL> quote details"},
+  {command: "chat", description: "Chat to GPT"},
 ];
 
 
@@ -112,11 +115,25 @@ bot.hears("/trending", async (ctx) => {
       getTrending(),
     ]);
     const result = await trendingTemplate(btc.price, trend.coinList);
-    functions.logger.log("Get trending:", result);
     ctx.reply(result);
   } catch (error) {
     functions.logger.error(error);
     ctx.reply(`Something wrong: ${error}`);
+  }
+});
+
+// OpenAI Chat Completion
+bot.hears(/^\/chat[ =](.+)$/, async (ctx) => {
+  const prompt = ctx.match[1];
+  try {
+    const response = await chatCompletion(prompt);
+    functions.logger.log(response);
+    ctx.reply(
+        response.message.content
+    );
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply("Sorry bros. something wrong with OpenAI");
   }
 });
 
