@@ -19,6 +19,12 @@ const {
   trendingTemplate,
 } = require("./src/templates.js");
 
+const BOT_COMMANDS = [
+  {command: "help", description: "See the manual"},
+  {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
+];
+
+
 const bot = new Telegraf(process.env.TELEGRAMBOT_KEY, {
   telegram: {
     webhookReply: true,
@@ -120,11 +126,8 @@ process.once("SIGTERM", () => bot.stop("SIGTERM"));
 exports.bot = functions.https.onRequest(async (req, res) => {
   functions.logger.log("Incoming message", req.body);
   const listOfCommands = await bot.telegram.getMyCommands();
-  if (listOfCommands.length === 0) {
-    await bot.telegram.setMyCommands([
-      {command: "help", description: "See the manual"},
-      {command: "trending", description: "Get Top-7 trending on CoinGecKo"},
-    ]);
+  if (listOfCommands.length !== BOT_COMMANDS.length) {
+    await bot.telegram.setMyCommands(BOT_COMMANDS);
   }
   return await bot.handleUpdate(req.body, res).then((rv) => {
     return !rv && res.sendStatus(200);
