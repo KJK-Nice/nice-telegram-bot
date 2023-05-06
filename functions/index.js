@@ -38,12 +38,12 @@ bot.catch((err, ctx) => {
 });
 
 // Initialize the commands
-bot.command("/start", (ctx) => ctx.reply(
-    "Hello! Send any message and I will copy it."
+bot.start("/start", (ctx) => ctx.reply(
+    "Welcome 🥳"
 ));
 
 
-bot.command("/help", (ctx) => ctx.reply(
+bot.help((ctx) => ctx.reply(
     `WELCOME TO THE MANUAL OF TELEGRAM NICE TEST BOT
     /p   <SYMBOL> for get coin price (USD)
     /q   <SYMBOL> for get quote summary.
