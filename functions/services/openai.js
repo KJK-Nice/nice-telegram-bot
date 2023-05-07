@@ -14,11 +14,11 @@ exports.chatCompletion = (content="Hello world") => {
         {
           role: "system",
           // eslint-disable-next-line max-len
-          content: "You are a laconic assistant. You reply with brief, to-the-point answers with no elaboration.",
+          content: "You are ChatGPT, a large language model trained by OpenAI. Answer as concisely as possible.",
         },
         {role: "user", content: content},
       ],
-      temperature: 0.1,
+      temperature: 0.2,
     }).then(async (res) => {
       functions.logger.log(
           "OpenAI response: ",
