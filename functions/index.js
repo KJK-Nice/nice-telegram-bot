@@ -106,6 +106,7 @@ bot.hears(/^\/qd[ =](.+)$/, async (ctx) => {
   }
 });
 
+
 // Get trending
 bot.hears("/trending", async (ctx) => {
   try {
@@ -125,6 +126,21 @@ bot.hears("/trending", async (ctx) => {
 bot.hears(/^\/chat[ =](.+)$/, async (ctx) => {
   const prompt = ctx.match[1];
   try {
+    const response = await chatCompletion(prompt);
+    functions.logger.log(response);
+    ctx.reply(
+        response.message.content
+    );
+  } catch (error) {
+    functions.logger.error(error);
+    ctx.reply("Sorry bros. something wrong with OpenAI");
+  }
+});
+
+bot.mention(RegExp(process.env.BOT_USERNAME, "i"), async (ctx) => {
+  const prompt = ctx.match[1];
+  try {
+    functions.logger.log("prompt:", prompt);
     const response = await chatCompletion(prompt);
     functions.logger.log(response);
     ctx.reply(
